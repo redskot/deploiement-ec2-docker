@@ -1,0 +1,26 @@
+# Fichiers système
+.bash_history
+.bash_logout
+.bashrc
+.cache/
+.docker/
+.gitconfig
+.profile
+.ssh/
+.sudo_as_admin_successful
+.viminfo
+
+# Environnements virtuels
+venv/
+myenv/
+
+# Fichiers sensibles
+.env
+
+# Fichiers Python compilés
+*.pyc
+__pycache__/
+
+# Bases de données
+instance/
+instance/tasks.db
