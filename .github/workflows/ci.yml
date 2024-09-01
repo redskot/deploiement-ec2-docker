@@ -1,21 +1,27 @@
 name: CI
+
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
+
 jobs:
-test:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v2
-- name: Set up Python
-uses: actions/setup-python@v2
-with:
-python-version: 3.8
-- name: Install dependencies
-run: pip install -r requirements.txt
-# deployer l'application avec docker compose pour réaliser les tests unitaires
-- name: Run unit tests
-run: python tests_main.py
-# supprimer les containers docker créés pour réaliser les tests
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # deployer l'application avec docker compose pour réaliser les tests unitaires
+      - name: Run unit tests
+        run: python tests_main.py
+
+      # supprimer les containers docker créés pour réaliser les tests
