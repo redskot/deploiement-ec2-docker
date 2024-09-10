@@ -30,7 +30,7 @@ jobs:
 
       # Étape 4 : Exécuter Renovate
       - name: Run Renovate
-        run: renovate <nom-utilisateur>/<nom-du-repository> # Remplace avec ton nom d'utilisateur et repository
+        run: renovate redskot/NouveauDepot # Remplace avec ton nom d'utilisateur et repository
         env:
           RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}  # Utilise le token stocké dans les secrets GitHub
 
