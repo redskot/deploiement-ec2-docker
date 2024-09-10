@@ -1,0 +1,36 @@
+name: Renovate
+
+# Déclencheur du workflow
+on:
+  # Planifie une exécution quotidienne à minuit
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # Permet aussi de lancer manuellement le workflow si nécessaire
+  workflow_dispatch:
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Cloner le repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Étape 2 : Installer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Version de Node.js
+
+      # Étape 3 : Installer Renovate
+      - name: Install Renovate
+        run: npm install -g renovate
+
+      # Étape 4 : Exécuter Renovate
+      - name: Run Renovate
+        run: renovate <nom-utilisateur>/<nom-du-repository> # Remplace avec ton nom d'utilisateur et repository
+        env:
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}  # Utilise le token stocké dans les secrets GitHub
+
