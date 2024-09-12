@@ -1,2 +1,3 @@
 Flask==3.0.0
 Flask-SQLAlchemy==3.1.1
+flask-testing==0.8.1  # Version recommandée pour Flask 3.x
