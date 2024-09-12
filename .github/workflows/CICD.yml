@@ -11,33 +11,29 @@ jobs:
   unit_tests:
     runs-on: ubuntu-latest
     steps:
-      # Récupère le code du dépôt
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Installe les dépendances à partir de requirements.txt
+      # Installe les dépendances
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Exécute le fichier de tests unitaires test.py
+      # Exécute les tests unitaires
       - name: Run Unit Tests
         run: python test.py
 
-  # Job de déploiement sur une machine auto-hébergée
+  # Job pour déployer l'application sur une machine auto-hébergée
   deploy:
-    # Ce job se déclenche seulement après que les tests unitaires aient réussi
     needs: unit_tests
     runs-on: self-hosted
     steps:
-      # Récupère à nouveau le code du dépôt
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Build et push l'image Docker
-      - name: Build and push Docker image
+      # Build l'image Docker localement (sans DockerHub)
+      - name: Build Docker image
         run: |
-          docker build -t your-dockerhub-username/your-app:${{ github.sha }} .
-          docker push your-dockerhub-username/your-app:${{ github.sha }}
+          docker build -t your-app:${{ github.sha }} .
 
       # Déploie l'application via Docker Compose
       - name: Deploy app
