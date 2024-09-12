@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+# Déclenche le pipeline sur chaque push vers la branche 'main'
+on:
+  push:
+    branches:
+      - main
+  # Permet de déclencher manuellement via l'interface GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  # Job pour exécuter les tests unitaires
+  unit_tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Récupère le code du dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Installe les dépendances nécessaires (ajustez selon votre projet)
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Exécute les tests unitaires
+      - name: Run Unit Tests
+        run: python -m unittest discover -s tests  # Exécute tous les tests unitaires présents dans le répertoire 'tests'
+
+  # Job pour exécuter les tests d'intégration
+  integration_tests:
+    # Ce job ne sera exécuté qu'après le succès du job 'unit_tests'
+    needs: unit_tests
+    runs-on: ubuntu-latest
+    steps:
+      # Récupère à nouveau le code du dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Installe les dépendances nécessaires (ajustez selon votre projet)
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Exécute les tests d'intégration
+      - name: Run Integration Tests
+        run: pytest tests/integration  # Exécute tous les tests d'intégration présents dans le répertoire 'integration'
+
+  # Job de déploiement sur une machine auto-hébergée
+  deploy:
+    # Ce job ne sera exécuté qu'après le succès des tests unitaires et d'intégration
+    needs: [unit_tests, integration_tests]
+    runs-on: self-hosted
+    steps:
+      # Récupère à nouveau le code du dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Build l'image Docker et pousse vers Docker Hub
+      - name: Build and push Docker image
+        run: |
+          docker build -t your-dockerhub-username/your-app:${{ github.sha }} .
+          docker push your-dockerhub-username/your-app:${{ github.sha }}
+
+      # Déploie l'application via Docker Compose sur la VM auto-hébergée
+      - name: Deploy app
+        run: |
+          export APP_VERSION=${{ github.sha }}
+          docker-compose -f docker-compose.yml up -d
