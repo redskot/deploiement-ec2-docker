@@ -25,7 +25,7 @@ def add():
     db.session.commit()
     return redirect(url_for('index')) #redirection sur la même page (actualisation de la page)
 
-@app.route('/delete/<int:task_id>', methods=['GET'])
+@app.route('/delete/<int:task_id>', methods=['POST'])
 def delete(task_id):
     db.session.delete(Task.query.get_or_404(task_id))
     db.session.commit()
