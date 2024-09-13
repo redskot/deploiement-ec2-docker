@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    image: your-app:${APP_VERSION}  # Image Docker de votre application avec une version dynamique
+    build:
+      context: .
+      dockerfile: Dockerfile  # Chemin vers le Dockerfile si vous voulez que Docker Compose le construise
+    ports:
+      - "8000:8000"  # Mappage du port local 8000 vers le port 8000 du conteneur
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mydatabase  # Variable d'environnement pour la DB
+    depends_on:
+      - db  # Le service 'web' dépend du service 'db' (PostgreSQL)
+
+  db:
+    image: postgres:13  # Image Docker de PostgreSQL
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Volume pour persister les données de la DB
+
+volumes:
+  postgres_data:
