@@ -25,3 +25,4 @@ __pycache__/
 instance/
 instance/tasks.db
 my_terraform_key.pem
+.terraform/
