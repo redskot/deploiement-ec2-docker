@@ -1,81 +1,140 @@
-🚀 Déploiement d'une application Flask sur AWS EC2 avec Docker
-📌 Objectif
-Ce projet consiste à déployer une application Flask sur une instance AWS EC2 en utilisant Docker. L’application est dockerisée, poussée sur Docker Hub, puis récupérée et exécutée sur EC2.
 
-🛠 Technologies utilisées
-AWS EC2 → Hébergement de l'application
-Docker → Conteneurisation de l'application
-Docker Hub → Stockage de l'image de l'application
-Python + Flask → Application web
-📂 Fichiers importants
-Dockerfile → Définit l’image Docker de l’application
-docker-compose.yml → Configuration du service avec PostgreSQL
-app.py → Code de l’application Flask
-requirements.txt → Liste des dépendances Python
-🔹 1️⃣ Préparation : Dockerisation de l'application
-Avant de la déployer sur AWS, l’application doit être conteneurisée avec Docker.
+# 🚀 Deploying a Flask App on AWS EC2 with Docker
 
-✔ Construire l’image Docker
-bash
-Copier
+A simple yet complete DevOps project that demonstrates how to containerize a Python Flask app using Docker, push it to Docker Hub, and deploy it on an AWS EC2 instance.
+
+---
+
+## 🗂️ Table of Contents
+- [📌 Project Overview](#-project-overview)
+- [🧱 Tech Stack](#-tech-stack)
+- [📁 Key Files](#-key-files)
+- [🚀 Step-by-Step Deployment](#-step-by-step-deployment)
+  - [1️⃣ Dockerize the App](#1-dockerize-the-app)
+  - [2️⃣ Push to Docker Hub](#2-push-to-docker-hub)
+  - [3️⃣ Launch EC2 Instance](#3-launch-ec2-instance)
+  - [4️⃣ Deploy App on EC2](#4-deploy-app-on-ec2)
+- [📸 Deployment Proof](#-deployment-proof)
+- [🛠️ Future Improvements](#️-future-improvements)
+- [📬 Contact](#-contact)
+
+---
+
+## 📌 Project Overview
+
+This project shows how to:
+
+✅ Dockerize a Flask web app  
+✅ Push the Docker image to Docker Hub  
+✅ Deploy the container on a remote AWS EC2 instance  
+✅ Run the application and expose it via HTTP (port 80)
+
+---
+
+## 🧱 Tech Stack
+
+| Purpose            | Tool                        |
+|--------------------|-----------------------------|
+| App Framework      | Flask (Python)              |
+| Containerization   | Docker                      |
+| Image Registry     | Docker Hub                  |
+| Cloud Hosting      | AWS EC2 (Ubuntu 22.04)      |
+
+---
+
+## 📁 Key Files
+
+| File                  | Description                            |
+|-----------------------|----------------------------------------|
+| `Dockerfile`          | Defines the Docker image               |
+| `docker-compose.yml`  | (Optional) Multi-service config        |
+| `app.py`              | Main Flask application                 |
+| `requirements.txt`    | Python dependencies                    |
+
+---
+
+## 🚀 Step-by-Step Deployment
+
+### 1️⃣ Dockerize the App
+
+```bash
 docker build -t your-app:v1 .
-✔ Tester en local
-bash
-Copier
 docker run -d -p 5000:5000 your-app:v1
-📌 Accéder à l’application sur http://localhost:5000
-
-🔹 2️⃣ Pousser l’image sur Docker Hub
-✔ Se connecter à Docker Hub
-bash
-Copier
+```
+### 2️⃣ Push to Docker Hub
+```
 docker login -u redskot
-✔ Tagger l’image avec le namespace Docker Hub
-bash
-Copier
 docker tag your-app:v1 redskot/your-app:v1
-✔ Pousser l’image sur Docker Hub
-bash
-Copier
-docker push redskot/your-app:v1
-📌 Vérification : L’image est maintenant disponible sur Docker Hub.
+docker push redskot/your-app:v1` 
+```
+➡️ Image now available on Docker Hub.
 
-🔹 3️⃣ Déployer sur AWS EC2
-✔ Lancer une instance EC2
-Type : t2.micro (Free Tier)
-OS : Ubuntu 22.04
-Ports ouverts : 22 (SSH), 80 (HTTP), 5000 (Application)
-✔ Se connecter en SSH
+----------
+
+### 3️⃣ Launch EC2 Instance
+
+-   Instance Type: `t2.micro` (Free Tier)
+    
+-   OS: `Ubuntu 22.04`
+    
+-   Open ports: `22` (SSH), `80` (HTTP), `5000` (App)
+    
+
+Connect via SSH:
+
 bash
-Copier
-ssh -i "ma_cle.pem" ubuntu@IP_DE_L_INSTANCE
-✔ Installer Docker sur EC2
-bash
-Copier
-sudo apt update -y
+
+CopierModifier
+
+`ssh -i "my-key.pem" ubuntu@<EC2_PUBLIC_IP>` 
+
+Install Docker on EC2:
+
+
+```
+`sudo apt update -y
 sudo apt install -y docker.io
 sudo systemctl start docker
 sudo systemctl enable docker
-sudo usermod -aG docker $USER
-📌 Déconnecte-toi et reconnecte-toi pour appliquer les permissions Docker.
+sudo usermod -aG docker $USER` 
+```
 
-🔹 4️⃣ Récupérer et exécuter l'application sur EC2
-✔ Télécharger l’image depuis Docker Hub
-bash
-Copier
+Logout/login again to apply Docker permissions.
+
+----------
+
+### 4️⃣ Deploy App on EC2
+
+
+```
 docker pull redskot/your-app:v1
-✔ Lancer l'application
-bash
-Copier
-docker run -d -p 80:5000 --name mon-app redskot/your-app:v1
-📌 Vérification : Accéder à http://IP_DE_L_INSTANCE pour voir l’application.
+docker run -d -p 80:5000 --name my-app redskot/your-app:v1` 
+```
+➡️ App available at: `http://<EC2_PUBLIC_IP>`
 
-📷 Preuve du déploiement
-Ajoute ici une capture d’écran montrant :
+----------
 
-L’application en ligne sur AWS EC2
-Le résultat de docker ps prouvant que le conteneur tourne
-📌 Améliorations futures
-✅ Automatiser avec Terraform
-✅ Gérer plusieurs machines avec Ansible
-✅ Ajouter un CI/CD avec GitHub Actions
+## 📸 Deployment Proof
+
+https://www.notion.so/image/attachment%3A1ae4eccd-0763-4e30-a57f-228eb452fa6c%3Aimage.png?table=block&id=1b6eb982-b3f4-8091-9a2e-c362b8993698&spaceId=da4d5e6f-93f6-4955-b0ae-a4b8b257987a&width=2000&userId=c294cf5f-12a9-475c-ba4c-4944a5aeeb5a&cache=v2
+
+## 🛠️ Future Improvements
+
+-   ✅ Automate infrastructure with **Terraform**
+    
+-   ✅ Manage multi-host setup with **Ansible**
+    
+-   ✅ Add **CI/CD pipeline** using GitHub Actions
+    
+-   ⏳ Add domain + SSL (Let's Encrypt or Route 53 + ACM)
+    
+
+----------
+
+## 📬 Contact
+
+Made with 💻 by **Mohamed-Rédha Bouras**  
+[LinkedIn](https://linkedin.com/in/redhabouras) · [GitHub](https://github.com/redskot)  
+Open to collaboration and DevOps opportunities.
+
+
